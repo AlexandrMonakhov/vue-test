@@ -12,55 +12,82 @@
         </div>
         <div class="filters-type">
           <label for="">Производитель</label>
-          <select>
-            <option v-for="m in manufacturer" :key="m.i" :value="m.m">{{ m.m }}</option>
+          <select v-model="manufacturer" v-if="selected === 'draft'">
+            <option value="">Любой</option>
+            <option 
+              v-for="(option, index) in manufacturerDraft" 
+              :key="index" 
+              :value="option"
+            >{{ option }}</option>
+          </select>
+          <select v-model="manufacturer" v-else>
+            <option value="">Любой</option>
+            <option 
+              v-for="(option, index) in manufacturerBottles" 
+              :key="index" 
+              :value="option"
+            >{{ option }}</option>
           </select>
         </div>
         <div class="filters-type">
           <label for="">Количество алкоголя</label>
-          <select>
-            <option v-for="m in shop.draft" :key="m.i" :value="m.a">{{ m.a }}</option>
+          <select v-model="alcho" v-if="selected === 'draft'">
+            <option value="">Все</option>
+            <option 
+              v-for="(option, index) in alchoDraft" 
+              :key="index" 
+              :value="option"
+            >{{ option }}</option>
+          </select>
+          
+          <select v-model="alcho" v-else>
+            <option value="">Все</option>
+            <option 
+              v-for="(option, index) in alchoBottles" 
+              :key="index" 
+              :value="option"
+            >{{ option }}</option>
           </select>
         </div>
       </div>
 
       <div class="table" v-if="selected === 'draft'">
         <div class="table__header">
-          <span class="table__item">№</span>
-          <span class="table__item">Название</span>
-          <span class="table__item">Производитель</span>
-          <span class="table__item">Кол-во алкоголя/Объем тары</span>
-          <span class="table__item">Цена</span>
-          <span class="table__item">Стиль</span>
+          <div class="table__item">№</div>
+          <div class="table__item">Название</div>
+          <div class="table__item">Производитель</div>
+          <div class="table__item">Кол-во алкоголя/Объем тары</div>
+          <div class="table__item">Цена</div>
+          <div class="table__item">Стиль</div>
         </div>
 
-        <div class="table__body" v-for="item in shop.draft" :key="item.i">
-          <span class="table__item">{{ item.i }}</span>
-          <span class="table__item">{{ item.t }}</span>
-          <span class="table__item">{{ item.m }}</span>
-          <span class="table__item">{{ item.a }}</span>
-          <span class="table__item">{{ item.p }}</span>
-          <span class="table__item">{{ item.c }}</span>
+        <div class="table__body" v-for="item in goodsDraft" :key="item.i">
+          <div class="table__item">{{ item.i }}</div>
+          <div class="table__item">{{ item.t }}</div>
+          <div class="table__item">{{ item.m }}</div>
+          <div class="table__item">{{ item.a }}</div>
+          <div class="table__item">{{ item.p }}</div>
+          <div class="table__item">{{ item.c }}</div>
         </div>
       </div>
       
       <div class="table" v-else>
         <div class="table__header">
-          <span class="table__item">№</span>
-          <span class="table__item">Название</span>
-          <span class="table__item">Производитель</span>
-          <span class="table__item">Кол-во алкоголя/Объем тары</span>
-          <span class="table__item">Цена</span>
-          <span class="table__item">Стиль</span>
+          <div class="table__item">№</div>
+          <div class="table__item">Название</div>
+          <div class="table__item">Производитель</div>
+          <div class="table__item">Кол-во алкоголя/Объем тары</div>
+          <div class="table__item">Цена</div>
+          <div class="table__item">Стиль</div>
         </div>
 
-        <div class="table__body" v-for="item in shop.bottles" :key="item.i">
-          <span class="table__item">{{ item.i }}</span>
-          <span class="table__item">{{ item.t }}</span>
-          <span class="table__item">{{ item.m }}</span>
-          <span class="table__item">{{ item.a }}</span>
-          <span class="table__item">{{ item.p }}</span>
-          <span class="table__item">{{ item.c }}</span>
+        <div class="table__body" v-for="item in goodsBottles" :key="item.i">
+          <div class="table__item">{{ item.i }}</div>
+          <div class="table__item">{{ item.t }}</div>
+          <div class="table__item">{{ item.m }}</div>
+          <div class="table__item">{{ item.a }}</div>
+          <div class="table__item">{{ item.p }}</div>
+          <div class="table__item">{{ item.c }}</div>
         </div>
       </div>
     </div>
@@ -69,22 +96,44 @@
 
 <script>
 
-import axios from 'axios'
+import unique from './helpers'
 
 export default {
   data: () => ({
-    shop: [],
-    manufacturer: [],
+    draft: [],
+    bottles: [],
+    manufacturerDraft: [],
+    manufacturerBottles: [],
+    alchoDraft: [],
+    alchoBottles: [],
+    alcho: '',
+    manufacturer: '',
     selected: null
   }),
-  mounted() {
+  computed: {
+    goodsBottles() {
+      return this.bottles
+        .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
+        .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
+    },
+    goodsDraft() {
+      return this.draft
+        .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
+        .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
+    }
+  },
+  created() {
     axios
       .get('https://cors-anywhere.herokuapp.com/http://beruvyhodnoy.ru/stock/get/?shop_id=22', {
         mode: 'cors'
       })
       .then(res => {
-        this.shop = res.data.data
-        this.manufacturer = [...new Set(this.shop.draft.filter(item => item.m))]
+        this.draft = res.data.data.draft
+        this.bottles = res.data.data.bottles
+        this.manufacturerDraft = unique(this.draft.map(item => item.m)).sort()
+        this.manufacturerBottles = unique(this.bottles.map(item => item.m)).sort()
+        this.alchoDraft = unique(this.draft.map(item => item.a)).sort()
+        this.alchoBottles = unique(this.bottles.map(item => item.a)).sort()
       })
 
       this.selected = this.$store.getters.getSelected
@@ -137,7 +186,6 @@ select {
     border-bottom: 2px solid black;
   }
   &__item {
-    display: block;
     text-align: center;
     width: 350px;
     padding: 20px 0px;

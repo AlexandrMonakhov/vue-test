@@ -14,9 +14,6 @@ export default new Vuex.Store({
 
   },
   getters: {
-    getShop(state) {
-      return state.shop
-    },
     getSelected(state) {
       return state.selected
     }
