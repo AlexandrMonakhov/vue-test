@@ -6,7 +6,7 @@
       <div class="table__item">{{ item.t }}</div>
       <div class="table__item">{{ item.m }}</div>
       <div class="table__item">{{ item.a }}</div>
-      <div class="table__item">{{ item.p }}</div>
+      <div class="table__item">{{ item.p }} ₽</div>
       <div class="table__item">{{ item.c }}</div>
     </div>
   </div>

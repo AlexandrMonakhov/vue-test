@@ -1,0 +1,11 @@
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  &-type {
+    max-width: 300px;
+  }
+
+}

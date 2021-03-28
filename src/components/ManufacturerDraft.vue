@@ -19,16 +19,6 @@ export default {
       type: Array,
       required: true
     }
-  },
-  // computed: {
-  //   manufacturerDraftName: {
-  //     get() {
-  //       return this.$store.getters['getManufacturerDraftName']
-  //     },
-  //     set(manufacturerDraft) {
-  //       this.$store.dispatch('setManufacturerDraftName', manufacturerDraft)
-  //     }
-  //   }
-  // }
+  }
 }
 </script>

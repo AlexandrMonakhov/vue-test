@@ -1,0 +1,22 @@
+.table {
+  
+  &__header {
+    font-weight: bold;
+  }
+
+  &__header, &__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+    font-size: 18px;
+    border-bottom: 2px solid black;
+  }
+
+  &__item {
+    text-align: center;
+    width: 350px;
+    padding: 20px 0px;
+  }
+
+}

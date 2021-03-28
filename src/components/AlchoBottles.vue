@@ -1,26 +1,34 @@
 <template>
   <div class="filters-type">
     <label for="">Количество алкоголя</label>
-    <select>
+    <select v-model="aBottles">
       <option value="">Все</option>
+      <option 
+        v-for="(alcho, index) in alchoBottles" 
+        :key="index" 
+        :value="alcho"
+      >{{ alcho }}</option>
     </select>
   </div>
 </template>
 
 <script>
 export default {
-  data: () => ({
-    manufacturer: null
-  }),
-  computed: {
-    getManufacturer() {
-      this.$store.getters.getManufacturer
+  props: {
+    alchoBottles: {
+      type: Array,
+      required: true
     }
   },
-  methods: {
-    setMessage () {
-      this.$store.dispatch('setManufacturer', this.manufacturer)
-    } 
+  computed: {
+    aBottles: {
+      get() {
+        return this.$store.getters['getAlchoBottles']
+      },
+      set(val) {
+        this.$store.dispatch('setAlchoBottles', val)
+      }
+    }
   }
 }
 </script>

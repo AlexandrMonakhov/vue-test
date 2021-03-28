@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="container">
-      <h1 class="logo">Пивососик</h1>
+      <h1 class="logo">Магазин пива "Беру Выходной"</h1>
       <div class="filters">
         <!-- Фильтра Разлив/Тара -->
         <BottlingType />
@@ -10,14 +10,14 @@
         <!-- Фильтр Производитель Тара -->
         <ManufacturerBottles v-if="selected === 'bottles'" :manufacturerBottles="getManufacturerBottles"/>
         <!-- Фильтр Алкоголь Разлив -->
-        <AlchoDraft v-if="selected === 'draft'" :alchoDraft="getAlchoDraft" />
+        <AlchoDraft v-if="selected === 'draft'" :alchoDraft="getAlchoDraftArr" />
         <!-- Фильтра Алкоголь Тара -->
-        <AlchoBottles v-if="selected === 'bottles'" :alchoBottles="getAlchoBottles" />
+        <AlchoBottles v-if="selected === 'bottles'" :alchoBottles="getAlchoBottlesArr" />
       </div>
       <!-- Таблица Разлив -->
-      <TableDraft v-if="selected === 'draft'" :draftData="getDraft"/>
+      <TableDraft v-if="selected === 'draft'" :draftData="filtredDraft"/>
       <!-- Таблица Тара -->
-      <TableBottles v-if="selected === 'bottles'" :bottlesData="getBottles"/>
+      <TableBottles v-if="selected === 'bottles'" :bottlesData="filtredBottles"/>
     </div>
   </div>
 </template>
@@ -59,29 +59,39 @@ export default {
     getManufacturerBottles() {
       return this.$store.getters['getManufacturerBottles']
     },
+    getManufacturerDraftName() {
+      return this.$store.getters['getManufDraftName']
+    },
+    getManufacturerBottlesName() {
+      return this.$store.getters['getManufBottlesName']
+    },
     getDraft() {
       return this.$store.getters['getDraft']
     },
     getBottles() {
       return this.$store.getters['getBottles']
     },
-    getAlchoDraft() {
-      return this.$store.getters['getAlchoDraft']
+    getAlchoDraftArr() {
+      return this.$store.getters['getAlchoDraftArr']
+    },
+    getAlchoBottlesArr() {
+      return this.$store.getters['getAlchoBottlesArr']
     },
     getAlchoBottles() {
       return this.$store.getters['getAlchoBottles']
+    },
+    getAlchoDraft() {
+      return this.$store.getters['getAlchoDraft']
+    },
+    filtredBottles() {
+      return this.getBottles
+      .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
+      .filter(item => this.getManufacturerBottlesName !== '' ? item.m === this.getManufacturerBottlesName : item)
+    },
+    filtredDraft() {
+      return this.getDraft
+      .filter(item => this.getAlchoDraft !== '' ? item.a === this.getAlchoDraft : item)
     }
-
-    // goodsBottles() {
-    //   return this.$store.getters['getBottles']
-    //     .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
-    //     .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
-    // },
-    // goodsDraft() {
-    //   return this.$store.getters['getDraft']
-    //     .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
-    //     .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
-    // }
   },
   created() {
     axios
@@ -97,54 +107,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-body {
-  font-family: sans-serif;
-}
-
-.container {
-  max-width: 1200px;
-  width: 95%;
-  margin: 0 auto;
-}
-.filters {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  &-type {
-    max-width: 300px;
-  }
-}
-
-label {
-  display: block;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-select {
-  width: 100%;
-  padding: 10px 20px;
-}
-
-.table {
-  &__header {
-    font-weight: bold;
-  }
-  &__header, &__body {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 30px;
-    font-size: 18px;
-    border-bottom: 2px solid black;
-  }
-  &__item {
-    text-align: center;
-    width: 350px;
-    padding: 20px 0px;
-  }
-}
-</style>

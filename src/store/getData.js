@@ -6,8 +6,14 @@ export default {
     manufacturerBottles: [],
     alchoDraftArr: [],
     alchoBottlesArr: [],
-    alchoDraft: '0.0',
-    alchoBottles: '1.5'
+    alchoDraft: '',
+    alchoBottles: '',
+    manufacturerDraftName: '',
+    manufacturerBottlesName: '',
+    priceDraftArr: [],
+    priceBottlesArr: [],
+    priceDraft: '',
+    priceBottles: ''
   },
   mutations: {
     setDraft(state, payload) {
@@ -22,11 +28,35 @@ export default {
     setManufacturerBottles(state, payload) {
       state.manufacturerBottles = payload
     },
-    setAlchoDraft(state, payload) {
+    setAlchoDraftArr(state, payload) {
       state.alchoDraftArr = payload
     },
-    setAlchoBottles(state, payload) {
+    setAlchoBottlesArr(state, payload) {
       state.alchoBottlesArr = payload
+    },
+    setAlchoDraft(state, payload) {
+      state.alchoDraft = payload
+    },
+    setAlchoBottles(state, payload) {
+      state.alchoBottles = payload
+    },
+    setManufacturerBottlesName(state, payload) {
+      state.manufacturerBottlesName = payload
+    },
+    setManufacturerDraftName(state, payload) {
+      state.manufacturerDraftName = payload
+    },
+    setPriceDraftArr(state, payload) {
+      state.priceDraftArr = payload
+    },
+    setPriceBottlesArr(state, payload) {
+      state.priceBottlesArr = payload
+    },
+    setPriceBottles(state, payload) {
+      state.priceBottles = payload
+    },
+    setPriceDraft(state, payload) {
+      state.priceDraft = payload
     }
 
   },
@@ -44,10 +74,22 @@ export default {
       commit('setManufacturerBottles', payload)
     },
     setAlchoDraftArr({ commit }, payload) {
-      commit('setAlchoDraft', payload)
+      commit('setAlchoDraftArr', payload)
     },
     setAlchoBottlesArr({ commit }, payload) {
+      commit('setAlchoBottlesArr', payload)
+    },
+    setAlchoDraft({ commit }, payload) {
+      commit('setAlchoDraft', payload)
+    },
+    setAlchoBottles({ commit }, payload) {
       commit('setAlchoBottles', payload)
+    },
+    setManufacturerBottlesName({ commit }, payload) {
+      commit('setManufacturerBottlesName', payload)
+    },
+    setManufacturerDraftName({ commit }, payload) {
+      commit('setManufacturerDraftName', payload)
     }
   },
   getters: {
@@ -74,6 +116,12 @@ export default {
     },
     getAlchoBottles(state) {
       return state.alchoBottles
+    },
+    getManufBottlesName(state) {
+      return state.manufacturerBottlesName
+    },
+    getManufDraftName(state) {
+      return state.manufacturerBottlesName
     }
   }
 }

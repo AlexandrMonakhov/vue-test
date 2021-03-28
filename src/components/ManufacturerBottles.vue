@@ -1,13 +1,13 @@
 <template>
   <div class="filters-type">
     <label for="">Производитель</label>
-    <select>
+    <select >
       <option value="">Любой</option>
       <option 
         v-for="(manBottles, index) in manufacturerBottles"
         :key="index"
         :value="manBottles"
-      >{{manBottles}}</option>
+      >{{ manBottles }}</option>
     </select>
   </div>
 </template>
@@ -20,15 +20,5 @@ export default {
       required: true
     }
   },
-  // computed: {
-  //   manufacturerBottlesName: {
-  //     get() {
-  //       return this.$store.getters['getManufacturerBottlesName']
-  //     },
-  //     set(manufacturerBottles) {
-  //       this.$store.dispatch('setManufacturerBottlesName', manufacturerBottles)
-  //     }
-  //   }
-  // }
 }
 </script>

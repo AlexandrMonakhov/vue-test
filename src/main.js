@@ -4,6 +4,8 @@ import store from './store'
 
 import axios from 'axios'
 
+import './assets/scss/style.scss'
+
 Vue.config.productionTip = false
 
 window.axios = axios
