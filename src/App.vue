@@ -3,93 +3,21 @@
     <div class="container">
       <h1 class="logo">Пивососик</h1>
       <div class="filters">
-        <div class="filters-type">
-          <label for="">Розлив/тара</label>
-          <select v-model="selected">
-            <option value="draft">Розлив</option>
-            <option value="bottles">Тара</option>
-          </select>
-        </div>
-        <div class="filters-type">
-          <label for="">Производитель</label>
-          <select v-model="manufacturer" v-if="selected === 'draft'">
-            <option value="">Любой</option>
-            <option 
-              v-for="(option, index) in manufacturerDraft" 
-              :key="index" 
-              :value="option"
-            >{{ option }}</option>
-          </select>
-          <select v-model="manufacturer" v-else>
-            <option value="">Любой</option>
-            <option 
-              v-for="(option, index) in manufacturerBottles" 
-              :key="index" 
-              :value="option"
-            >{{ option }}</option>
-          </select>
-        </div>
-        <div class="filters-type">
-          <label for="">Количество алкоголя</label>
-          <select v-model="alcho" v-if="selected === 'draft'">
-            <option value="">Все</option>
-            <option 
-              v-for="(option, index) in alchoDraft" 
-              :key="index" 
-              :value="option"
-            >{{ option }}</option>
-          </select>
-          
-          <select v-model="alcho" v-else>
-            <option value="">Все</option>
-            <option 
-              v-for="(option, index) in alchoBottles" 
-              :key="index" 
-              :value="option"
-            >{{ option }}</option>
-          </select>
-        </div>
+        <!-- Фильтра Разлив/Тара -->
+        <BottlingType />
+        <!-- Фильтр Производитель Разлива -->
+        <ManufacturerDraft v-if="selected === 'draft'" :manufacturerDrafts="getManufacturerDraft" />
+        <!-- Фильтр Производитель Тара -->
+        <ManufacturerBottles v-if="selected === 'bottles'" :manufacturerBottles="getManufacturerBottles"/>
+        <!-- Фильтр Алкоголь Разлив -->
+        <AlchoDraft v-if="selected === 'draft'" :alchoDraft="getAlchoDraft" />
+        <!-- Фильтра Алкоголь Тара -->
+        <AlchoBottles v-if="selected === 'bottles'" :alchoBottles="getAlchoBottles" />
       </div>
-
-      <div class="table" v-if="selected === 'draft'">
-        <div class="table__header">
-          <div class="table__item">№</div>
-          <div class="table__item">Название</div>
-          <div class="table__item">Производитель</div>
-          <div class="table__item">Кол-во алкоголя/Объем тары</div>
-          <div class="table__item">Цена</div>
-          <div class="table__item">Стиль</div>
-        </div>
-
-        <div class="table__body" v-for="item in goodsDraft" :key="item.i">
-          <div class="table__item">{{ item.i }}</div>
-          <div class="table__item">{{ item.t }}</div>
-          <div class="table__item">{{ item.m }}</div>
-          <div class="table__item">{{ item.a }}</div>
-          <div class="table__item">{{ item.p }}</div>
-          <div class="table__item">{{ item.c }}</div>
-        </div>
-      </div>
-      
-      <div class="table" v-else>
-        <div class="table__header">
-          <div class="table__item">№</div>
-          <div class="table__item">Название</div>
-          <div class="table__item">Производитель</div>
-          <div class="table__item">Кол-во алкоголя/Объем тары</div>
-          <div class="table__item">Цена</div>
-          <div class="table__item">Стиль</div>
-        </div>
-
-        <div class="table__body" v-for="item in goodsBottles" :key="item.i">
-          <div class="table__item">{{ item.i }}</div>
-          <div class="table__item">{{ item.t }}</div>
-          <div class="table__item">{{ item.m }}</div>
-          <div class="table__item">{{ item.a }}</div>
-          <div class="table__item">{{ item.p }}</div>
-          <div class="table__item">{{ item.c }}</div>
-        </div>
-      </div>
+      <!-- Таблица Разлив -->
+      <TableDraft v-if="selected === 'draft'" :draftData="getDraft"/>
+      <!-- Таблица Тара -->
+      <TableBottles v-if="selected === 'bottles'" :bottlesData="getBottles"/>
     </div>
   </div>
 </template>
@@ -98,45 +26,74 @@
 
 import unique from './helpers'
 
+import ManufacturerDraft from '@/components/ManufacturerDraft'
+import ManufacturerBottles from '@/components/ManufacturerBottles'
+import AlchoBottles from '@/components/AlchoBottles'
+import AlchoDraft from '@/components/AlchoDraft'
+import TableBottles from '@/components/TableBottles'
+import TableDraft from '@/components/TableDraft'
+import BottlingType from '@/components/BottlingType'
+
 export default {
-  data: () => ({
-    draft: [],
-    bottles: [],
-    manufacturerDraft: [],
-    manufacturerBottles: [],
-    alchoDraft: [],
-    alchoBottles: [],
-    alcho: '',
-    manufacturer: '',
-    selected: null
-  }),
+  components: { 
+    ManufacturerDraft, 
+    ManufacturerBottles,
+    AlchoBottles,
+    AlchoDraft,
+    TableBottles,
+    TableDraft,
+    BottlingType
+  },
   computed: {
-    goodsBottles() {
-      return this.bottles
-        .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
-        .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
+    selected: {
+      get() {
+        return this.$store.getters['getSelected']
+      },
+      set() {
+        this.$store.dispatch('setSelect')
+      }
     },
-    goodsDraft() {
-      return this.draft
-        .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
-        .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
+    getManufacturerDraft() {
+      return this.$store.getters['getManufacturerDraft']
+    },
+    getManufacturerBottles() {
+      return this.$store.getters['getManufacturerBottles']
+    },
+    getDraft() {
+      return this.$store.getters['getDraft']
+    },
+    getBottles() {
+      return this.$store.getters['getBottles']
+    },
+    getAlchoDraft() {
+      return this.$store.getters['getAlchoDraft']
+    },
+    getAlchoBottles() {
+      return this.$store.getters['getAlchoBottles']
     }
+
+    // goodsBottles() {
+    //   return this.$store.getters['getBottles']
+    //     .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
+    //     .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
+    // },
+    // goodsDraft() {
+    //   return this.$store.getters['getDraft']
+    //     .filter(item => this.alcho !== '' ? item.a === this.alcho : item)
+    //     .filter(item => this.manufacturer !== '' ? item.m === this.manufacturer : item)
+    // }
   },
   created() {
     axios
-      .get('https://cors-anywhere.herokuapp.com/http://beruvyhodnoy.ru/stock/get/?shop_id=22', {
-        mode: 'cors'
-      })
+      .get('http://localhost:3030/getData')
       .then(res => {
-        this.draft = res.data.data.draft
-        this.bottles = res.data.data.bottles
-        this.manufacturerDraft = unique(this.draft.map(item => item.m)).sort()
-        this.manufacturerBottles = unique(this.bottles.map(item => item.m)).sort()
-        this.alchoDraft = unique(this.draft.map(item => item.a)).sort()
-        this.alchoBottles = unique(this.bottles.map(item => item.a)).sort()
+        this.$store.dispatch('setDraft', res.data.data.draft)
+        this.$store.dispatch('setBottles', res.data.data.bottles)
+        this.$store.dispatch('setManufacturerDraft', unique(this.$store.getters['getDraft'].map(item => item.m)).sort())
+        this.$store.dispatch('setManufacturerBottles', unique(this.$store.getters['getBottles'].map(item => item.m)).sort())
+        this.$store.dispatch('setAlchoDraftArr', unique(this.$store.getters['getDraft'].map(item => item.a)).sort())
+        this.$store.dispatch('setAlchoBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.a)).sort())
       })
-
-      this.selected = this.$store.getters.getSelected
   }
 }
 </script>
@@ -171,7 +128,6 @@ select {
   width: 100%;
   padding: 10px 20px;
 }
-
 
 .table {
   &__header {
