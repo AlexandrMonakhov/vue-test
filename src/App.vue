@@ -5,6 +5,13 @@
       <div class="filters">
         <!-- Фильтра Разлив/Тара -->
         <BottlingType />
+        <!-- Фильтр по цене слайдер -->
+        <div class="range-slider">
+          <p>Min:{{minPrice}}</p>
+          <input type="range" min="0" max="1200" step="5" v-model.number="minPrice" @change="setRangeSlider">
+          <p>Max:{{maxPrice}}</p>
+          <input type="range" min="0" max="1200" step="5" v-model.number="maxPrice" @change="setRangeSlider">
+        </div>
         <!-- Фильтр Производитель Разлива -->
         <ManufacturerDraft v-if="selected === 'draft'" :manufacturerDrafts="getManufacturerDraft" />
         <!-- Фильтр Производитель Тара -->
@@ -22,6 +29,10 @@
       <TableDraft v-if="selected === 'draft'" :draftData="filtredDraft"/>
       <!-- Таблица Тара -->
       <TableBottles v-if="selected === 'bottles'" :bottlesData="filtredBottles"/>
+
+      <div class="pagination-info">
+        <p>Current Page: {{page.current}}</p>
+      </div>
 
       <div class="pagination" v-if="selected === 'draft'">
         <button @click="prevPage">←</button>
@@ -55,7 +66,9 @@ export default {
     page: {
       current: 1,
       length: 10,
-    }
+    },
+    minPrice: 0,
+    maxPrice: 1200
   }),
   methods: {
     prevPage() {
@@ -67,7 +80,12 @@ export default {
       if ((this.page.current * this.page.length) < type.length) {
         this.page.current += 1
       }
-    }
+    },
+    setRangeSlider() {
+      if (this.minPrice > this.maxPrice) {
+        [this.maxPrice, this.minPrice] = [this.minPrice, this.maxPrice]
+      }
+    },
   },
   components: { 
     ManufacturerDraft, 
@@ -136,6 +154,9 @@ export default {
         .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
         .filter(item => this.getPriceBottles !== '' ? item.p === this.getPriceBottles : item)
         .filter(item => this.getManufBottlesName !== '' ? item.m === this.getManufBottlesName : item)
+        .filter(item => {
+          return item.p >= this.minPrice && item.p <= this.maxPrice
+        })
         .filter((row, index) => {
           let start = (this.page.current - 1) * this.page.length
           let end = this.page.current * this.page.length
@@ -148,12 +169,15 @@ export default {
         .filter(item => this.getAlchoDraft !== '' ? item.a === this.getAlchoDraft : item)
         .filter(item => this.getPriceDraft !== '' ? item.p === this.getPriceDraft : item)
         .filter(item => this.getManufDraftName !== '' ? item.m === this.getManufDraftName : item)
+        .filter(item => {
+          return item.p >= this.minPrice && item.p <= this.maxPrice
+        })
         .filter((row, index) => {
           let start = (this.page.current - 1) * this.page.length
           let end = this.page.current * this.page.length
 
           if (index >= start && index < end) return true
-        })
+        })    
     }
   },
   created() {
@@ -181,4 +205,24 @@ export default {
   justify-content: center;
   margin: 20px 0px;
 }
+
+.range-slider {
+  width: 200px;
+  margin: auto 16px;
+  text-align: center;
+  position: relative;
+  & input[type="range"] {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  z-index: 2;
+  position: relative;
+  top: 2px;
+  margin-top: -7px;
+}
+
 </style>
