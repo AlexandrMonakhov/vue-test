@@ -10,6 +10,11 @@ yarn install
 yarn serve
 ```
 
+### How to start the project
+```
+npm run start
+```
+
 ### Compiles and minifies for production
 ```
 yarn build
