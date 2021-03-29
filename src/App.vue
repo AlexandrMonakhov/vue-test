@@ -1,5 +1,4 @@
 <template>
-  <div class="wrapper">
     <div class="container">
       <h1 class="logo">Магазин пива "Беру Выходной"</h1>
       <div class="filters">
@@ -48,7 +47,6 @@
         <button @click="nextPage(getBottles)">→</button>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -197,8 +195,8 @@ export default {
       .then(res => {
         this.$store.dispatch('setDraft', res.data.data.draft)
         this.$store.dispatch('setBottles', res.data.data.bottles)
-        this.$store.dispatch('setManufacturerDraft', unique(this.$store.getters['getDraft'].map(item => item.m)).sort())
-        this.$store.dispatch('setManufacturerBottles', unique(this.$store.getters['getBottles'].map(item => item.m)).sort())
+        this.$store.dispatch('setManufacturerDraft', unique(this.$store.getters['getDraft'].map(item => item.m)).filter(item => item.replace(/(\r\n|\n|\r)/gm, '')).sort())
+        this.$store.dispatch('setManufacturerBottles', unique(this.$store.getters['getBottles'].map(item => item.m)).filter(item => item.replace(/(\r\n|\n|\r)/gm, '')).sort())
         this.$store.dispatch('setAlchoDraftArr', unique(this.$store.getters['getDraft'].map(item => item.a)).sort())
         this.$store.dispatch('setAlchoBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.a)).sort())
         this.$store.dispatch('setPriceBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.p)).sort())
