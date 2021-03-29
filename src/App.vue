@@ -22,6 +22,16 @@
       <TableDraft v-if="selected === 'draft'" :draftData="filtredDraft"/>
       <!-- Таблица Тара -->
       <TableBottles v-if="selected === 'bottles'" :bottlesData="filtredBottles"/>
+
+      <div class="pagination" v-if="selected === 'draft'">
+        <button @click="prevPage">←</button>
+        <button @click="nextPage(getDraft)">→</button>
+      </div>
+
+      <div class="pagination" v-if="selected === 'bottles'">
+        <button @click="prevPage">←</button>
+        <button @click="nextPage(getBottles)">→</button>
+      </div>
     </div>
   </div>
 </template>
@@ -41,6 +51,24 @@ import PriceDraft from '@/components/PriceDraft'
 import PriceBottles from '@/components/PriceBottles'
 
 export default {
+  data: () => ({
+    page: {
+      current: 1,
+      length: 10,
+    }
+  }),
+  methods: {
+    prevPage() {
+      if (this.page.current > 1) {
+        this.page.current -= 1
+      }
+    },
+    nextPage(type) {
+      if ((this.page.current * this.page.length) < type.length) {
+        this.page.current += 1
+      }
+    }
+  },
   components: { 
     ManufacturerDraft, 
     ManufacturerBottles,
@@ -108,12 +136,24 @@ export default {
         .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
         .filter(item => this.getPriceBottles !== '' ? item.p === this.getPriceBottles : item)
         .filter(item => this.getManufBottlesName !== '' ? item.m === this.getManufBottlesName : item)
+        .filter((row, index) => {
+          let start = (this.page.current - 1) * this.page.length
+          let end = this.page.current * this.page.length
+
+          if (index >= start && index < end) return true
+        })
     },
     filtredDraft() {
       return this.getDraft
         .filter(item => this.getAlchoDraft !== '' ? item.a === this.getAlchoDraft : item)
         .filter(item => this.getPriceDraft !== '' ? item.p === this.getPriceDraft : item)
         .filter(item => this.getManufDraftName !== '' ? item.m === this.getManufDraftName : item)
+        .filter((row, index) => {
+          let start = (this.page.current - 1) * this.page.length
+          let end = this.page.current * this.page.length
+
+          if (index >= start && index < end) return true
+        })
     }
   },
   created() {
@@ -132,3 +172,13 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss">
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px;
+}
+</style>
