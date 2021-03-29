@@ -9,6 +9,8 @@
         <ManufacturerDraft v-if="selected === 'draft'" :manufacturerDrafts="getManufacturerDraft" />
         <!-- Фильтр Производитель Тара -->
         <ManufacturerBottles v-if="selected === 'bottles'" :manufacturerBottles="getManufacturerBottles"/>
+        <!-- Фильтр по стоимости -->
+        <PriceDraft :draftPrice="getPriceDraftArr"/>
         <!-- Фильтр Алкоголь Разлив -->
         <AlchoDraft v-if="selected === 'draft'" :alchoDraft="getAlchoDraftArr" />
         <!-- Фильтра Алкоголь Тара -->
@@ -33,6 +35,7 @@ import AlchoDraft from '@/components/AlchoDraft'
 import TableBottles from '@/components/TableBottles'
 import TableDraft from '@/components/TableDraft'
 import BottlingType from '@/components/BottlingType'
+import PriceDraft from '@/components/PriceDraft'
 
 export default {
   components: { 
@@ -42,7 +45,8 @@ export default {
     AlchoDraft,
     TableBottles,
     TableDraft,
-    BottlingType
+    BottlingType,
+    PriceDraft
   },
   computed: {
     selected: {
@@ -83,6 +87,12 @@ export default {
     getAlchoDraft() {
       return this.$store.getters['getAlchoDraft']
     },
+    getPriceDraftArr() {
+      return this.$store.getters['getPriceDraftArr']
+    },
+    getPriceBottlesArr() {
+      return this.$store.getters['getPriceBottlesArr']
+    },
     filtredBottles() {
       return this.getBottles
       .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
@@ -90,7 +100,7 @@ export default {
     },
     filtredDraft() {
       return this.getDraft
-      .filter(item => this.getAlchoDraft !== '' ? item.a === this.getAlchoDraft : item)
+        .filter(item => this.getAlchoDraft !== '' ? item.a === this.getAlchoDraft : item)
     }
   },
   created() {
@@ -103,6 +113,8 @@ export default {
         this.$store.dispatch('setManufacturerBottles', unique(this.$store.getters['getBottles'].map(item => item.m)).sort())
         this.$store.dispatch('setAlchoDraftArr', unique(this.$store.getters['getDraft'].map(item => item.a)).sort())
         this.$store.dispatch('setAlchoBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.a)).sort())
+        this.$store.dispatch('setPriceBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.p)).sort())
+        this.$store.dispatch('setPriceDraftArr', unique(this.$store.getters['getDraft'].map(item => item.p)).sort())
       })
   }
 }

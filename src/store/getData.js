@@ -90,6 +90,18 @@ export default {
     },
     setManufacturerDraftName({ commit }, payload) {
       commit('setManufacturerDraftName', payload)
+    },
+    setPriceBottlesArr({ commit }, payload) {
+      commit('setPriceBottlesArr', payload)
+    },
+    setPriceDraftArr({ commit }, payload) {
+      commit('setPriceDraftArr', payload)
+    },
+    setPriceBottles({ commit }, payload) {
+      commit('setPriceBottles', payload)
+    },
+    setPriceDraft({ commit }, payload) {
+      commit('setPriceDraft', payload)
     }
   },
   getters: {
@@ -122,6 +134,18 @@ export default {
     },
     getManufDraftName(state) {
       return state.manufacturerBottlesName
+    },
+    getPriceBottlesArr(state) {
+      return state.priceBottlesArr
+    },
+    getPriceDraftArr(state) {
+      return state.priceDraftArr
+    },
+    getPriceBottles(state) {
+      return state.priceBottles
+    },
+    getPriceDraft(state) {
+      return state.priceDraft
     }
   }
 }
