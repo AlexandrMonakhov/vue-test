@@ -9,7 +9,6 @@
         :value="alcho"
       >{{ alcho }}</option>
     </select>
-    
   </div>
 </template>
 

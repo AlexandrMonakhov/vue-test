@@ -1,13 +1,13 @@
 <template>
   <div class="filters-type">
     <label for="">Производитель</label>
-    <select>
+    <select v-model="mDraft">
       <option value="">Любой</option>
       <option 
-        v-for="(manDraft, index) in manufacturerDrafts"
+        v-for="(manufDraft, index) in manufacturerDrafts"
         :key="index"
-        :value="manDraft"
-      >{{manDraft}}</option>
+        :value="manufDraft"
+      >{{ manufDraft }}</option>
     </select>
   </div>
 </template>
@@ -18,6 +18,16 @@ export default {
     manufacturerDrafts: {
       type: Array,
       required: true
+    }
+  },
+  computed: {
+    mDraft: {
+      get() {
+        return this.$store.getters['getManufDraft']
+      },
+      set(val) {
+        this.$store.dispatch('setManufDraft', val)
+      }
     }
   }
 }

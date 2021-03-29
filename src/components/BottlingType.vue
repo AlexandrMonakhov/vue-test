@@ -1,8 +1,8 @@
 <template>
   <div class="filters-type">
-    <label for="">Розлив/тара</label>
+    <label for="">Разлив/тара</label>
     <select v-model="selected">
-      <option value="draft">Розлив</option>
+      <option value="draft">Разлив</option>
       <option value="bottles">Тара</option>
     </select>
   </div>

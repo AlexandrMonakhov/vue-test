@@ -9,8 +9,10 @@
         <ManufacturerDraft v-if="selected === 'draft'" :manufacturerDrafts="getManufacturerDraft" />
         <!-- Фильтр Производитель Тара -->
         <ManufacturerBottles v-if="selected === 'bottles'" :manufacturerBottles="getManufacturerBottles"/>
-        <!-- Фильтр по стоимости -->
-        <PriceDraft :draftPrice="getPriceDraftArr"/>
+        <!-- Фильтр по стоимости Разлива -->
+        <PriceDraft v-if="selected === 'draft'" :draftPrice="getPriceDraftArr" />
+        <!-- Фильтр по стоимости Тара -->
+        <PriceBottles v-if="selected === 'bottles'" :draftBottles="getPriceBottlesArr" />
         <!-- Фильтр Алкоголь Разлив -->
         <AlchoDraft v-if="selected === 'draft'" :alchoDraft="getAlchoDraftArr" />
         <!-- Фильтра Алкоголь Тара -->
@@ -36,6 +38,7 @@ import TableBottles from '@/components/TableBottles'
 import TableDraft from '@/components/TableDraft'
 import BottlingType from '@/components/BottlingType'
 import PriceDraft from '@/components/PriceDraft'
+import PriceBottles from '@/components/PriceBottles'
 
 export default {
   components: { 
@@ -46,7 +49,8 @@ export default {
     TableBottles,
     TableDraft,
     BottlingType,
-    PriceDraft
+    PriceDraft,
+    PriceBottles
   },
   computed: {
     selected: {
@@ -63,11 +67,11 @@ export default {
     getManufacturerBottles() {
       return this.$store.getters['getManufacturerBottles']
     },
-    getManufacturerDraftName() {
-      return this.$store.getters['getManufDraftName']
+    getManufDraftName() {
+      return this.$store.getters['getManufDraft']
     },
-    getManufacturerBottlesName() {
-      return this.$store.getters['getManufBottlesName']
+    getManufBottlesName() {
+      return this.$store.getters['getManufBottles']
     },
     getDraft() {
       return this.$store.getters['getDraft']
@@ -93,14 +97,23 @@ export default {
     getPriceBottlesArr() {
       return this.$store.getters['getPriceBottlesArr']
     },
+    getPriceDraft() {
+      return this.$store.getters['getPriceDraft']
+    },
+    getPriceBottles() {
+      return this.$store.getters['getPriceBottles']
+    },
     filtredBottles() {
       return this.getBottles
-      .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
-      .filter(item => this.getManufacturerBottlesName !== '' ? item.m === this.getManufacturerBottlesName : item)
+        .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
+        .filter(item => this.getPriceBottles !== '' ? item.p === this.getPriceBottles : item)
+        .filter(item => this.getManufBottlesName !== '' ? item.m === this.getManufBottlesName : item)
     },
     filtredDraft() {
       return this.getDraft
         .filter(item => this.getAlchoDraft !== '' ? item.a === this.getAlchoDraft : item)
+        .filter(item => this.getPriceDraft !== '' ? item.p === this.getPriceDraft : item)
+        .filter(item => this.getManufDraftName !== '' ? item.m === this.getManufDraftName : item)
     }
   },
   created() {
@@ -114,7 +127,7 @@ export default {
         this.$store.dispatch('setAlchoDraftArr', unique(this.$store.getters['getDraft'].map(item => item.a)).sort())
         this.$store.dispatch('setAlchoBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.a)).sort())
         this.$store.dispatch('setPriceBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.p)).sort())
-        this.$store.dispatch('setPriceDraftArr', unique(this.$store.getters['getDraft'].map(item => item.p)).sort())
+        this.$store.dispatch('setPriceDraftArr', unique(this.$store.getters['getDraft'].map(item => item.p)))
       })
   }
 }

@@ -1,10 +1,10 @@
 <template>
   <div class="filters-type">
     <label for="">Цена</label>
-    <select v-model="dPrice">
+    <select v-model="dBottles">
       <option value="">Все</option>
       <option 
-        v-for="(price, index) in draftPrice" 
+        v-for="(price, index) in draftBottles" 
         :key="index"
       >{{ price }}</option>
     </select>
@@ -14,18 +14,18 @@
 <script>
 export default {
   props: {
-    draftPrice: {
+    draftBottles: {
       type: Array,
       required: true
     }
   },
   computed: {
-    dPrice: {
+    dBottles: {
       get() {
-        return this.$store.getters['getPriceDraft']
+        return this.$store.getters['getPriceBottles']
       },
       set(price) {
-        this.$store.dispatch('setPriceDraft', price)
+        this.$store.dispatch('setPriceBottles', price)
       }
     }
   }

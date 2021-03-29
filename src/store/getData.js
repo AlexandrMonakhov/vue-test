@@ -8,8 +8,8 @@ export default {
     alchoBottlesArr: [],
     alchoDraft: '',
     alchoBottles: '',
-    manufacturerDraftName: '',
-    manufacturerBottlesName: '',
+    manufDraft: '',
+    manufBottles: '',
     priceDraftArr: [],
     priceBottlesArr: [],
     priceDraft: '',
@@ -40,11 +40,11 @@ export default {
     setAlchoBottles(state, payload) {
       state.alchoBottles = payload
     },
-    setManufacturerBottlesName(state, payload) {
-      state.manufacturerBottlesName = payload
+    setManufBottles(state, payload) {
+      state.manufBottles = payload
     },
-    setManufacturerDraftName(state, payload) {
-      state.manufacturerDraftName = payload
+    setManufDraft(state, payload) {
+      state.manufDraft = payload
     },
     setPriceDraftArr(state, payload) {
       state.priceDraftArr = payload
@@ -85,11 +85,11 @@ export default {
     setAlchoBottles({ commit }, payload) {
       commit('setAlchoBottles', payload)
     },
-    setManufacturerBottlesName({ commit }, payload) {
-      commit('setManufacturerBottlesName', payload)
+    setManufBottles({ commit }, payload) {
+      commit('setManufBottles', payload)
     },
-    setManufacturerDraftName({ commit }, payload) {
-      commit('setManufacturerDraftName', payload)
+    setManufDraft({ commit }, payload) {
+      commit('setManufDraft', payload)
     },
     setPriceBottlesArr({ commit }, payload) {
       commit('setPriceBottlesArr', payload)
@@ -129,11 +129,11 @@ export default {
     getAlchoBottles(state) {
       return state.alchoBottles
     },
-    getManufBottlesName(state) {
-      return state.manufacturerBottlesName
+    getManufBottles(state) {
+      return state.manufBottles
     },
-    getManufDraftName(state) {
-      return state.manufacturerBottlesName
+    getManufDraft(state) {
+      return state.manufDraft
     },
     getPriceBottlesArr(state) {
       return state.priceBottlesArr
