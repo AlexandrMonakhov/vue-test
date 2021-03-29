@@ -24,6 +24,8 @@
         <AlchoDraft v-if="selected === 'draft'" :alchoDraft="getAlchoDraftArr" />
         <!-- Фильтра Алкоголь Тара -->
         <AlchoBottles v-if="selected === 'bottles'" :alchoBottles="getAlchoBottlesArr" />
+        <!-- Фильтр по Таре -->
+        <TareBottles v-if="selected === 'bottles'" :tareBottles="getTare"/>
       </div>
       <!-- Таблица Разлив -->
       <TableDraft v-if="selected === 'draft'" :draftData="filtredDraft"/>
@@ -35,11 +37,13 @@
       </div>
 
       <div class="pagination" v-if="selected === 'draft'">
+        <button @click="page.current = 1">First Page</button>
         <button @click="prevPage">←</button>
         <button @click="nextPage(getDraft)">→</button>
       </div>
 
       <div class="pagination" v-if="selected === 'bottles'">
+        <button @click="page.current = 1">First Page</button>
         <button @click="prevPage">←</button>
         <button @click="nextPage(getBottles)">→</button>
       </div>
@@ -60,6 +64,7 @@ import TableDraft from '@/components/TableDraft'
 import BottlingType from '@/components/BottlingType'
 import PriceDraft from '@/components/PriceDraft'
 import PriceBottles from '@/components/PriceBottles'
+import TareBottles from '@/components/TareBottles'
 
 export default {
   data: () => ({
@@ -96,7 +101,8 @@ export default {
     TableDraft,
     BottlingType,
     PriceDraft,
-    PriceBottles
+    PriceBottles,
+    TareBottles
   },
   computed: {
     selected: {
@@ -149,14 +155,19 @@ export default {
     getPriceBottles() {
       return this.$store.getters['getPriceBottles']
     },
+    getTare() {
+      return this.$store.getters['getTare']
+    },
+    getTareVal() {
+      return this.$store.getters['getTareVal']
+    },
     filtredBottles() {
       return this.getBottles
         .filter(item => this.getAlchoBottles !== '' ? item.a === this.getAlchoBottles : item)
         .filter(item => this.getPriceBottles !== '' ? item.p === this.getPriceBottles : item)
         .filter(item => this.getManufBottlesName !== '' ? item.m === this.getManufBottlesName : item)
-        .filter(item => {
-          return item.p >= this.minPrice && item.p <= this.maxPrice
-        })
+        .filter(item => item.p >= this.minPrice && item.p <= this.maxPrice)
+        .filter(item => new RegExp(this.getTareVal).test(item.t) ? item : null)
         .filter((row, index) => {
           let start = (this.page.current - 1) * this.page.length
           let end = this.page.current * this.page.length
@@ -192,6 +203,9 @@ export default {
         this.$store.dispatch('setAlchoBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.a)).sort())
         this.$store.dispatch('setPriceBottlesArr', unique(this.$store.getters['getBottles'].map(item => item.p)).sort())
         this.$store.dispatch('setPriceDraftArr', unique(this.$store.getters['getDraft'].map(item => item.p)))
+        const tareArr = []
+        this.$store.getters['getBottles'].forEach(item => item.t.replace(/([0-9]){1,}(\.|\,){1,}?([0-9]){1,}/gi, str => tareArr.push(str)))
+        this.$store.dispatch('setTare', unique(tareArr))
       })
   }
 }

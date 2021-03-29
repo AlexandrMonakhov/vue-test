@@ -2,6 +2,8 @@ export default {
   state: {
     draft: [],
     bottles: [],
+    tare: [],
+    tareVal: '',
     manufacturerDraft: [],
     manufacturerBottles: [],
     alchoDraftArr: [],
@@ -57,6 +59,12 @@ export default {
     },
     setPriceDraft(state, payload) {
       state.priceDraft = payload
+    },
+    setTare(state, payload) {
+      state.tare = payload
+    },
+    setTareVal(state, payload) {
+      state.tareVal = payload
     }
 
   },
@@ -102,6 +110,12 @@ export default {
     },
     setPriceDraft({ commit }, payload) {
       commit('setPriceDraft', payload)
+    },
+    setTare({ commit }, payload) {
+      commit('setTare', payload)
+    },
+    setTareVal({ commit }, payload) {
+      commit('setTareVal', payload)
     }
   },
   getters: {
@@ -146,6 +160,12 @@ export default {
     },
     getPriceDraft(state) {
       return state.priceDraft
+    },
+    getTare(state) {
+      return state.tare
+    },
+    getTareVal(state) {
+      return state.tareVal
     }
   }
 }
